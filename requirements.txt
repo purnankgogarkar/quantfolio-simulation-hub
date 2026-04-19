@@ -3,6 +3,7 @@ streamlit==1.32.0
 pandas==2.2.0
 numpy==1.26.4
 yfinance==0.2.32
+openpyxl>=3.1.2
 
 # Simulations & Analysis
 scipy==1.11.2
