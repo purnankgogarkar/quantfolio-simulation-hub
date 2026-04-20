@@ -234,7 +234,7 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 [Your Name]
 - GitHub: [@purnankgogarkar](https://github.com/purnankgogarkar)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/purnankgogarkar)
+- LinkedIn: [Purnank Gogarkar](https://linkedin.com/in/purnankgogarkar)
 - Email: purnank18@gmail.com
 
 ## 📧 Questions?
