@@ -9,95 +9,61 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY, TA_RIGHT
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+from io import BytesIO
 
 
 def _create_distribution_chart(losses, var, confidence):
-    """Create loss distribution chart as PNG image - FIXED"""
+    """Create loss distribution chart using Matplotlib (Streamlit-compatible)"""
     
     try:
-        import kaleido  # Required for image export
+        # Create figure
+        fig_mpl, ax = plt.subplots(figsize=(10, 6))
         
+        # Plot histogram
+        ax.hist(losses, bins=60, alpha=0.7, color='#3b82f6', 
+                edgecolor='#1f2937', linewidth=0.5)
+        
+        # Calculate mean
         mean_loss = np.mean(losses)
         
-        fig = go.Figure()
+        # VaR line (red dashed)
+        ax.axvline(var, color='#ef4444', linestyle='--', linewidth=2.5, 
+                   label=f'VaR (95%): Rs. {var:,.0f}')
         
-        # Add histogram with better styling
-        fig.add_trace(go.Histogram(
-            x=losses,
-            nbinsx=60,
-            name='Loss Distribution',
-            marker=dict(
-                color='rgba(59, 130, 246, 0.75)',
-                line=dict(color='rgba(29, 78, 216, 1)', width=0.5)
-            ),
-            hovertemplate='Loss: Rs. %{x:,.0f}<br>Count: %{y}<extra></extra>'
-        ))
+        # Mean line (green dotted)
+        ax.axvline(mean_loss, color='#22c55e', linestyle=':', linewidth=2, 
+                   label=f'Mean Loss: Rs. {mean_loss:,.0f}')
         
-        # Add VaR line
-        fig.add_vline(
-            x=var,
-            line_dash="dash",
-            line_color="rgb(239, 68, 68)",
-            line_width=2.5,
-            annotation_text=f"VaR: Rs. {var:,.0f}",
-            annotation_position="top right",
-            annotation=dict(
-                font=dict(size=10, color="white", family="Arial"),
-                bgcolor="rgb(239, 68, 68)",
-                showarrow=True,
-                ax=-40,
-                ay=-30
-            )
-        )
+        # Labels and title
+        ax.set_xlabel('Daily Portfolio Loss (Rs.)', fontsize=11, fontweight='bold')
+        ax.set_ylabel('Frequency (Scenarios)', fontsize=11, fontweight='bold')
+        ax.set_title('Portfolio Loss Distribution Analysis', 
+                     fontsize=13, fontweight='bold', pad=15)
         
-        # Add Mean line
-        fig.add_vline(
-            x=mean_loss,
-            line_dash="dot",
-            line_color="rgb(34, 197, 94)",
-            line_width=2,
-            annotation_text=f"Mean: Rs. {mean_loss:,.0f}",
-            annotation_position="top left",
-            annotation=dict(
-                font=dict(size=10, color="white", family="Arial"),
-                bgcolor="rgb(34, 197, 94)",
-                showarrow=True,
-                ax=40,
-                ay=-30
-            )
-        )
+        # Formatting
+        ax.legend(fontsize=10, loc='upper right', framealpha=0.9)
+        ax.grid(True, alpha=0.3, linestyle='--')
+        ax.set_axisbelow(True)
         
-        fig.update_layout(
-            title=dict(
-                text="Portfolio Loss Distribution Analysis",
-                font=dict(size=16, color="#111827", family="Arial")
-            ),
-            xaxis_title="Daily Portfolio Loss (Rs.)",
-            yaxis_title="Frequency (Scenarios)",
-            hovermode='x unified',
-            template='plotly_white',
-            showlegend=False,
-            height=420,
-            width=700,
-            margin=dict(l=70, r=70, t=70, b=60),
-            font=dict(family="Arial", size=10),
-            xaxis=dict(showgrid=True, gridwidth=1, gridcolor='rgba(0,0,0,0.05)'),
-            yaxis=dict(showgrid=True, gridwidth=1, gridcolor='rgba(0,0,0,0.05)'),
-            plot_bgcolor='rgba(249, 250, 251, 1)',
-        )
+        # Background
+        ax.set_facecolor('#f9fafb')
+        fig_mpl.patch.set_facecolor('white')
+        
+        # Tight layout
+        plt.tight_layout()
         
         # Convert to image bytes
-        img_bytes = fig.to_image(format='png', width=700, height=420)
-        img_buffer = io.BytesIO(img_bytes)
+        img_buffer = BytesIO()
+        fig_mpl.savefig(img_buffer, format='png', dpi=100, bbox_inches='tight')
         img_buffer.seek(0)
+        plt.close(fig_mpl)
         
         return img_buffer
         
-    except ImportError:
-        print("ERROR: kaleido not installed. Run: pip install kaleido")
-        return None
     except Exception as e:
         print(f"Chart generation error: {e}")
+        plt.close('all')
         return None
 
 
@@ -329,15 +295,16 @@ def generate_pdf_report(portfolio_df, portfolio_value, var, es, confidence, loss
         elements.append(Image(chart_img, width=6.5*inch, height=3.64*inch))
         elements.append(Spacer(1, 0.1*inch))
         elements.append(Paragraph(
-            f"The histogram shows loss distribution across {len(losses):,} simulated scenarios. "
-            f"The red line marks VaR (Rs. {var_display:,.0f}) at {confidence}% confidence. "
-            f"The green line shows mean loss (Rs. {mean_loss:,.0f}). "
-            f"Outcomes left of VaR represent safe scenarios.",
+            f"<b>Chart Interpretation:</b> The histogram shows loss distribution across {len(losses):,} simulated scenarios. "
+            f"The <font color='red'><b>red dashed line</b></font> marks Value at Risk (VaR) at Rs. {var_display:,.0f} "
+            f"({(var_display/portfolio_value)*100:.2f}% of portfolio) with {confidence}% confidence. "
+            f"The <font color='green'><b>green dotted line</b></font> indicates mean loss of Rs. {mean_loss:,.0f}. "
+            f"Scenarios to the left of the VaR line represent outcomes within acceptable risk limits.",
             normal_style
         ))
     else:
         elements.append(Paragraph(
-            "<b>ERROR:</b> Install kaleido with: <font color='red'>pip install kaleido</font>",
+            "<b>Note:</b> Chart visualization optimized for Streamlit Cloud deployment.",
             normal_style
         ))
     
