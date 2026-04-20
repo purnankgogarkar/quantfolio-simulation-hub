@@ -233,9 +233,9 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 ## 👨‍💻 Author
 
 [Your Name]
-- GitHub: [@YourUsername](https://github.com/YOUR_USERNAME)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
-- Email: your.email@example.com
+- GitHub: [@purnankgogarkar](https://github.com/purnankgogarkar)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/purnankgogarkar)
+- Email: purnank18@gmail.com
 
 ## 📧 Questions?
 
