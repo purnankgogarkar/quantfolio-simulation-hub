@@ -55,14 +55,17 @@ A professional-grade **portfolio risk analysis platform** that helps investors u
 
 ## 📸 Screenshots
 
-### Dashboard
-[Add screenshot of main dashboard]
+### Main Window
+<img width="1907" height="1025" alt="image" src="https://github.com/user-attachments/assets/93dd89d7-626f-4169-99a3-3f2ba4318a01" />
 
 ### Risk Analysis Results
-[Add screenshot of risk metrics]
+<img width="1917" height="1018" alt="image" src="https://github.com/user-attachments/assets/39a07c0b-2f90-4984-af00-2a44f817ab07" />
+<img width="1918" height="1008" alt="image" src="https://github.com/user-attachments/assets/0446ff2b-b7b0-4b47-86c0-6c0e61a61b2f" />
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/6821c99f-8b96-41d4-bef3-4fe623f1674a" />
 
 ### PDF Report
-[Add screenshot of PDF report]
+<img width="910" height="953" alt="image" src="https://github.com/user-attachments/assets/3af30702-b1ae-4abb-8bf8-69357288f1ca" />
+<img width="897" height="896" alt="image" src="https://github.com/user-attachments/assets/a7a8b33d-441d-42c4-a6c9-39ca95fc7c82" />
 
 ## 🚀 Quick Start
 
