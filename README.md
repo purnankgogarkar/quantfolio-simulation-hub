@@ -77,7 +77,7 @@ A professional-grade **portfolio risk analysis platform** that helps investors u
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/YOUR_USERNAME/quantfolio-simulation-hub.git
+git clone https://github.com/purnankgogarkar/quantfolio-simulation-hub.git
 cd quantfolio-simulation-hub
 ```
 
